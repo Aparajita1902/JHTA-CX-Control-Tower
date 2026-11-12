@@ -7,6 +7,7 @@
 <style>
 /* Layout: an operating console. Tabs across the top; the journey board is a lane chart (phases, stations, touchpoints, data feeds, experience, leakage) and a station opens a live drawer on the right. */
 :root{
+  --scrim:rgba(10,14,40,.5);
   --bg:#F4F5FA; --surface:#FFFFFF; --ink:#161B2E; --muted:#5C6480; --line:#DDE1EC; --lane:#F8F9FC;
   --accent:#2F4BE0; --accent-soft:#E6EAFD;
   --p1:#2F4BE0; --p2:#0E9488; --p3:#DA4A35; --p4:#B7820A; --on-p:#FFFFFF;
@@ -30,7 +31,7 @@
   --rev:#E0B040; --rev-soft:#3A2F12; --cost:#A784F0; --cost-soft:#2A2148;
   --ok:#4FCB8E; --ok-soft:#163626; color-scheme:dark }
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14px;line-height:1.5}
-.wrap{max-width:1320px;margin:0 auto;padding-block:18px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:16px}
+.wrap{max-width:1360px;margin:0 auto;padding-block:18px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:16px}
 h1,h2,h3{font-family:var(--display);margin:0;line-height:1.2;text-wrap:balance}
 h1{font-size:20px;font-weight:700}
 h2{font-size:18px;font-weight:600}
@@ -39,7 +40,7 @@ p{margin:0}
 button{font:inherit;color:inherit}
 svg.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
 :focus-visible{outline:3px solid var(--accent);outline-offset:2px}
-.top{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:space-between}
+.top{display:flex;flex-wrap:wrap;gap:12px 36px;align-items:flex-end;justify-content:flex-start}
 .brand{display:flex;flex-direction:column;gap:2px;min-width:0}
 .brand span{font-size:12px;color:var(--muted)}
 .tabs{display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:4px;flex-wrap:wrap}
@@ -59,7 +60,7 @@ svg.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;str
 .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}
 
 .scroll{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:14px}
-.board{display:grid;grid-template-columns:104px repeat(7,minmax(124px,1fr));min-width:1040px;padding:14px 14px 10px;row-gap:8px}
+.board{display:grid;grid-template-columns:76px repeat(7,minmax(96px,1fr));min-width:780px;padding:14px 14px 10px;row-gap:8px}
 .lab{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;align-self:center;padding-right:8px}
 .phase{color:var(--on-p);font-family:var(--display);font-weight:600;font-size:13px;padding:9px 8px 9px 22px;text-align:center;clip-path:polygon(0 0,calc(100% - 14px) 0,100% 50%,calc(100% - 14px) 100%,0 100%,14px 50%);margin-right:-8px}
 .phase.first{clip-path:polygon(0 0,calc(100% - 14px) 0,100% 50%,calc(100% - 14px) 100%,0 100%);padding-left:10px;border-radius:6px 0 0 6px}
@@ -91,7 +92,10 @@ svg.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;str
 .act.ok{color:var(--ok)}
 .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--muted)}
 
-.drawer{position:fixed;top:0;right:0;bottom:0;width:min(500px,100%);background:var(--surface);border-left:1px solid var(--line);box-shadow:-12px 0 40px rgba(10,14,40,.18);z-index:20;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);padding-right:env(safe-area-inset-right,0px)}
+.drawer{position:fixed;inset:0;z-index:20;background:var(--scrim);display:grid;place-items:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.modal{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 24px 60px rgba(10,14,40,.3);width:min(1020px,100%);max-height:100%;display:flex;flex-direction:column;overflow:hidden}
+.col{display:flex;flex-direction:column;gap:20px;min-width:0}
+@media (min-width:860px){ .dbody.two{display:grid;grid-template-columns:1fr 1fr;gap:20px 28px;align-items:start} .dbody.two .fn{grid-column:1/-1} }
 .dhead{display:flex;gap:12px;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line)}
 .dhead .disc{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:var(--on-p);flex:none}
 .dhead div{flex:1;min-width:0}
@@ -159,7 +163,38 @@ td.n{font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:600}
 .form{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
 .form label{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--muted)}
 .form input{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-variant-numeric:tabular-nums}
-@media (min-width:1000px){ body.dopen .wrap{margin-right:0;padding-right:516px;max-width:none} }
+.leak div{display:flex;flex-direction:column;align-items:center;gap:1px;font-size:10.5px;color:var(--muted)}
+.leak b{color:var(--ink);font-size:12px;font-weight:600}.leak .dot{width:7px;height:7px;margin-right:4px}
+button.act{border:0;background:transparent;cursor:pointer;width:100%;text-decoration:underline;text-underline-offset:2px}
+.feedchip{white-space:normal;text-align:left;line-height:1.25}
+.station{padding:10px 4px}
+.effs{display:flex;flex-wrap:wrap;gap:3px 14px;font-size:11.5px;color:var(--muted)}.effs b{color:var(--ink);font-weight:600}.effs .dot{width:7px;height:7px}.effs span{white-space:nowrap}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(236px,1fr));gap:12px}
+.mcard{border:1.5px solid var(--line);background:var(--surface);border-radius:12px;padding:14px;cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:6px;min-width:0}
+.mcard:hover{border-color:var(--muted)}
+.mcard .nm{font-size:13px;font-weight:600}
+.mval{font-family:var(--display);font-size:26px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.1}
+.mval small{font-size:13px;font-weight:500;color:var(--muted);font-family:var(--body)}
+.delta{font-size:12px;font-weight:600}.delta.g{color:var(--ok)}.delta.b{color:var(--s3)}.delta.n{color:var(--muted)}
+.mcard svg.spark{width:100%;height:36px;display:block}
+.mini{display:flex;gap:4px;flex-wrap:wrap}
+.mini span{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;color:var(--on-p)}
+.mini span svg.ic{width:12px;height:12px}
+svg.trend{width:100%;height:auto;display:block}
+svg.trend text{font-family:var(--body);font-size:11px;fill:var(--muted)}
+.drv{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.drv div{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}
+.drv b{font-variant-numeric:tabular-nums;white-space:nowrap}
+.lnk{display:flex;flex-direction:column;gap:6px}
+.lnk button{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:8px 10px;cursor:pointer;text-align:left;display:flex;gap:10px;align-items:center}
+.lnk button:hover{border-color:var(--accent)}
+.lnk .disc{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:var(--on-p);flex:none}
+.lnk .disc svg.ic{width:15px;height:15px}
+.lnk small{display:block;color:var(--muted);font-size:12px}
+button.tp.lk{cursor:pointer;color:var(--accent);border-color:var(--accent)}
+.hint{font-size:13px;font-weight:600;color:var(--accent)}
+.ph ol{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:12px}
+.inp{border:1px solid var(--line);border-radius:8px;padding:9px 12px;font-size:13px;font-weight:500}
 .pill{white-space:nowrap}
 .pill.op{background:var(--accent-soft);color:var(--accent)}.pill.cb{background:var(--cost-soft);color:var(--cost)}
 .grp{display:flex;flex-direction:column;gap:6px}.grp+.grp{margin-top:8px}.gh{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
@@ -170,38 +205,45 @@ td.n{font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:600}
 <div class="wrap">
   <div class="top">
     <div class="brand"><img src="data:image/png;base64,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" alt="Johnson"><h1>CX Control Tower</h1><span>Concept prototype</span></div>
-    <nav class="tabs" aria-label="Views"><a href="#journey" id="tab-journey">Customer journey</a><a href="#recommendations" id="tab-recommendations">Recommendations</a></nav>
+    <nav class="tabs" aria-label="Views"><a href="#journey" id="tab-journey">Customer journey</a><a href="#recommendations" id="tab-recommendations">Recommendations</a><a href="#metrics" id="tab-metrics">CX metrics</a></nav>
   </div>
 
 
   <section id="view-journey" style="display:flex;flex-direction:column;gap:12px">
     <div class="bar">
-      <div style="display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center"><div class="seg" id="segs" role="group" aria-label="Customer segment"></div><div class="seg" id="subs" role="group" aria-label="Channel or customer group"></div></div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center"><span class="lab">Segment</span><div class="seg" id="segs" role="group" aria-label="Customer segment"></div><div class="seg" id="subs" role="group" aria-label="Channel or customer group"></div><span class="lab" style="margin-left:12px">Product line</span><div class="seg" id="lines" role="group" aria-label="Product line"></div></div>
       <div class="totals" id="totals"></div>
     </div>
+    <p class="hint">Select a station to open its signals, insight, estimated leakage and recommended actions.</p>
     <div class="scroll"><div class="board" id="board"></div></div>
     <div class="legend">
       <span><i class="dot" style="background:var(--s1)"></i>Low pain</span><span><i class="dot" style="background:var(--s2)"></i>Medium</span><span><i class="dot" style="background:var(--s3)"></i>High</span>
-      <span><i class="dot" style="background:var(--rev)"></i>Revenue at risk per month</span><span><i class="dot" style="background:var(--cost)"></i>Cost leakage per month</span>
-      <span>Select a station to see its data feed, insight and recommended actions.</span><a href="#assumptions">Data and assumptions</a>
+      <span><i class="dot" style="background:var(--rev)"></i>Estimated revenue at risk per month</span><span><i class="dot" style="background:var(--cost)"></i>Estimated cost leakage per month</span>
+      <a href="#assumptions">Data and assumptions</a>
     </div>
   </section>
 
   <section id="view-recommendations" hidden style="display:flex;flex-direction:column;gap:12px">
     <div class="panel">
-      <div class="bar"><h2>Recommended actions by category, ranked by estimated monthly effect</h2><span class="small" id="rec-seg"></span></div>
+      <div class="bar"><h2>Recommended actions by category</h2><span class="small" id="rec-seg"></span></div>
       <div class="seg" id="recf" role="group" aria-label="Category"></div>
       <div class="sum" id="sum"></div>
-      <div class="tscroll"><table><thead><tr><th>Station</th><th>Action selected</th><th>Category</th><th>Type</th><th>Est. effect / month</th><th>Status</th><th></th></tr></thead><tbody id="recs"></tbody></table></div>
-      <p class="small">Effect is the share of that station's estimated revenue at risk and cost leakage the action could recover. Shares are our assumptions and are untested. Actions at the same station overlap, so their effects should not be added together. <b>Operational</b> actions can run now with current teams and tools. <b>Capability builds</b> need new technology, data or process and are delivered over months. <a href="#assumptions">Data and assumptions</a></p>
+      <div class="tscroll"><table><thead><tr><th>Station</th><th>Action selected</th><th>Category</th><th>Type</th><th>Estimates</th><th>Status</th><th></th></tr></thead><tbody id="recs"></tbody></table></div>
+      <p class="small">Estimated amounts are shown as XX until they can be sized with Johnson's data. <b>Operational</b> actions can run now with current teams and tools. <b>Capability builds</b> need new technology, data or process and are delivered over months. <a href="#assumptions">Data and assumptions</a></p>
     </div>
+  </section>
+
+  <section id="view-metrics" hidden style="display:flex;flex-direction:column;gap:12px">
+    <div class="bar"><h2>CX metrics and how they are trending</h2><span class="small">All segments · last six months · <span class="tag sim">Simulated</span></span></div>
+    <p class="hint">Select a metric to see its trend, what is driving it, and the stations and actions it links to.</p>
+    <div class="mgrid" id="mgrid"></div>
   </section>
 
   <section id="view-assumptions" hidden style="display:flex;flex-direction:column;gap:12px">
     <div class="bar"><h2>Data and assumptions</h2><a href="#journey" class="small">Back to customer journey</a></div>
     <div class="panel">
-      <h3>Assumptions behind the dollar estimates</h3>
-      <p class="small">These are placeholders, not Johnson figures. Change any value and every estimate in the prototype recalculates. Amounts are in Australian dollars per month for consumers who buy direct; other segments scale from them.</p>
+      <h3>Inputs needed to size the dollar estimates</h3>
+      <p class="small">Dollar figures are shown as XX until they can be calculated from Johnson's own data. These are the inputs we would need, by segment.</p>
       <div class="form" id="form"></div>
     </div>
     <div class="panel">
@@ -209,10 +251,11 @@ td.n{font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:600}
       <div class="tscroll"><table><thead><tr><th>Station</th><th>Data source</th><th>Where it comes from</th><th>Availability</th></tr></thead><tbody id="srcs"></tbody></table></div>
     </div>
   </section>
-<p class="note" id="note"><b>Prototype with illustrative data.</b> Items tagged <span class="tag pub">Public</span> are real and come from public reviews and Johnson's help centre. Items tagged <span class="tag sim">Simulated</span>, and every dollar estimate, are placeholders showing what the view would hold once connected to Johnson's systems.</p>
+<p class="note" id="note"><b>Prototype with illustrative data.</b> Items tagged <span class="tag pub">Public</span> are real and come from public reviews and Johnson's help centre. Items tagged <span class="tag sim">Simulated</span> are placeholders showing what the view would hold once connected to Johnson's systems. Dollar figures and simulated values are shown as XX until they can be drawn from Johnson's data.</p>
 </div>
 
 <aside class="drawer" id="drawer" hidden aria-label="Station detail"></aside>
+<aside class="drawer" id="mmodal" hidden aria-label="Metric detail"></aside>
 
 <script>
 const IC={
@@ -230,15 +273,16 @@ const IC={
  web:'<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c3 3 3 14 0 17M12 3.5c-3 3-3 14 0 17"/>',
  int:'<path d="M5 6c0-1.7 3-3 7-3s7 1.3 7 3-3 3-7 3-7-1.3-7-3zM5 6v12c0 1.7 3 3 7 3s7-1.3 7-3V6M5 12c0 1.7 3 3 7 3s7-1.3 7-3"/>',
  dev:'<path d="M2 12h5l2-6 4 12 2-6h7"/>',
+ chair:'<path d="M6 11V7a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v4M3.500 12a2 2 0 0 1 4 0v3h9v-3a2 2 0 0 1 4 0v6h-17zM6.500 18v2M17.500 18v2"/>',
  close:'<path d="M6 6l12 12M18 6 6 18"/>'
 };
 const ic=k=>`<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">${IC[k]}</svg>`;
 const KIND={web:"Web",int:"Internal system",dev:"Equipment"};
-const L={pr:"https://www.productreview.com.au/listings/johnson",tp:"https://au.trustpilot.com/review/johnsonfitness.com",uk:"https://au.trustpilot.com/review/uk.johnsonfitness.com",loox:"https://loox.io/s/NkbmyWagno?page=2",kb:"https://johnson-health-tech-australia.reamaze.com/kb/warranty"};
+const L={well:"https://www.johnsonfitness.com.au/collections/wellness",pr:"https://www.productreview.com.au/listings/johnson",tp:"https://au.trustpilot.com/review/johnsonfitness.com",uk:"https://au.trustpilot.com/review/uk.johnsonfitness.com",loox:"https://loox.io/s/NkbmyWagno?page=2",kb:"https://johnson-health-tech-australia.reamaze.com/kb/warranty"};
 const PH=[["Purchase",2,"p1"],["Ownership",1,"p2"],["Service",3,"p3"],["Loyalty",1,"p4"]];
 /* f: feed items [kind, source, text, link-or-empty]; a: actions [title, description, type, revShare, costShare, audience, preview] — first is the recommendation */
 const ST=[
- {id:"buy",n:"Research and buy",ph:"p1",count:"1.4 / 5 public rating",
+ {id:"buy",n:"Research and buy",ph:"p1",cpub:1,count:"1.4 / 5 public rating",
   tp:["Search","Review sites","Website","Showroom","Chat"],
   src:[["web","Review sites"],["int","Web analytics"],["int","Chat transcripts"],["int","Point of sale"]],
   k:[["1.4 / 5","ProductReview rating, 18 reviews","pub"],["12%","Reviews answered within 7 days","sim"],["2.1%","Product page to cart","sim"]],
@@ -271,10 +315,11 @@ const ST=[
  {id:"fault",n:"Fault and triage",ph:"p3",count:"118 tickets silent 5+ days",
   tp:["Web form","Phone","Email","Chat","Technician"],
   src:[["int","Helpdesk tickets"],["int","Call recordings"],["int","Field service schedule"],["web","Customer photos and video"]],
-  k:[["3.4 days","Median first response","sim"],["48%","Fixed on the first visit","sim"],["27%","Open cases with no owner","sim"]],
-  f:[["int","Helpdesk","118 tickets have had no reply for five or more days.",""],["int","Call transcripts","\"No one called me back\" appears in 31% of repeat calls.",""],["int","Field service","44% of this week's visits ended as diagnosed, part required.",""],["web","ProductReview","A gym operator paid $343.20 for an assessment in April 2025 and reported no quote by November.","pr"],["web","ProductReview","Several reviewers describe calls, emails and service requests going unanswered.","pr"]],
-  ins:"Cases stall before diagnosis, and the first visit is spent finding out what is wrong.",
-  a:[["Diagnose from photo, video and error code","The customer uploads evidence at first contact. The model predicts the fault and the part before a technician is booked.","AI agent",.30,.45,"All new fault cases","Flow: 1. Customer scans the serial number and uploads a photo, video or error code. 2. Model returns likely fault, part and confidence. 3. Entitlement checked. 4. Technician booked with the part allocated. 5. Low-confidence cases go to a remote video check."],
+  k:[["3.4 days","Median first response","sim"],["48%","First time right","sim"],["27%","Open cases with no owner","sim"]],
+  f:[["int","Call recordings","Agents spend several minutes of each call looking up the machine, purchase and service history before they can respond.",""],["int","Call recordings","Calls about error codes most often end with a promise to call back.",""],["int","Helpdesk","118 tickets have had no reply for five or more days.",""],["int","Call transcripts","\"No one called me back\" appears in 31% of repeat calls.",""],["int","Field service","44% of this week's visits ended as diagnosed, part required.",""],["web","ProductReview","A gym operator paid $343.20 for an assessment in April 2025 and reported no quote by November.","pr"],["web","ProductReview","Several reviewers describe calls, emails and service requests going unanswered.","pr"]],
+  ins:"Agents lack the machine and service history during the call, so cases stall and the first visit is spent finding out what is wrong.",
+  a:[["Deploy Agent Assist for the service desk","During a call or chat, the agent sees the customer's machine, warranty status, service history and the likely fault and part.","AI agent",.20,.40,"All service desk agents","On each contact: 1. Identifies the customer and machine from phone number, email or serial number. 2. Shows purchase date, warranty status and past repairs. 3. Suggests the likely fault, the part and the next step from manuals and past cases. 4. Drafts the reply or case note for the agent to approve."],
+     ["Diagnose from photo, video and error code","The customer uploads evidence at first contact. The model predicts the fault and the part before a technician is booked.","AI agent",.30,.45,"All new fault cases","Flow: 1. Customer scans the serial number and uploads a photo, video or error code. 2. Model returns likely fault, part and confidence. 3. Entitlement checked. 4. Technician booked with the part allocated. 5. Low-confidence cases go to a remote video check."],
      ["Acknowledge every case within an hour","An automatic reply naming the case owner, the next step and a date.","Automation",.20,.20,"All new cases","Hi {first name}, we have your request about your {model}. {owner} owns your case. Next step: a diagnosis call by {date}. Your case number is {case number}."],
      ["Call back the silent cases","A priority callback queue for every case with no reply in five days.","Process",.25,.10,"118 cases today","Queue order: commercial customers first, then oldest case. Each call ends with a booked next step and a date."],
      ["Offer a remote video diagnosis","A 15-minute video slot with a technician in place of a first site visit.","Process",.15,.35,"Cases the model cannot diagnose","Hi {first name}, a technician can look at your {model} over video today. Choose a 15-minute slot: {link}"]]},
@@ -305,6 +350,7 @@ const ST=[
   f:[["int","Installed base","2,140 owners passed five years this quarter with no contact from Johnson.",""],["dev","Usage telemetry","380 machines show heavy use and are out of warranty.",""],["int","Service history","Owners whose repair closed within 14 days buy again at more than twice the rate of others.",""],["web","Trustpilot UK","Johnson Fitness UK holds 4.0 out of 5 from 122 reviews with the same products.","uk"]],
   ins:"Johnson holds the data to time an offer and is not using it.",
   a:[["Time offers by age and usage","Upgrade and service-plan offers sent when a machine passes an age or usage threshold.","Proactive message",.25,.20,"2,140 owners past five years","Hi {first name}, your {model} has done {hours} hours over five years. Trade it in for {trade-in value} off a new {new model}, or protect it with a service plan from {price} a month. {link}"],
+     ["Send a warranty-expiry reminder","A WhatsApp or email reminder 45 days before warranty ends, with an extended-cover offer.","Proactive message",.20,.05,"Owners whose warranty ends in the next 60 days","Hi {first name}, the warranty on your {model} ends on {date}. Extend your cover for {price} before then and keep priority service and parts. Reply YES or tap here: {link}"],
      ["Win back after a resolved repair","A follow-up 10 days after a repair closes, with a service-plan offer.","Proactive message",.15,.10,"Customers with a repair closed this month","Hi {first name}, is your {model} running well since the repair? If anything is not right, reply here. To avoid a wait next time, a service plan includes priority parts: {link}"],
      ["Account health score for operators","A score from uptime, open cases and response times, reviewed with each commercial account before its refresh.","Monitoring",.30,.0,"Commercial accounts within 12 months of refresh","Score inputs: machine uptime, open cases, average days to fix, repeat faults, contract end date."],
      ["Trade-in for repeat-fault owners","Owners with three or more repairs are offered a trade-in before they give up on the brand.","Goodwill",.10,.15,"About 90 owners","Hi {first name}, your {model} has needed more repairs than it should. We would like to offer {trade-in value} toward a new machine. {link}"]]}
@@ -315,28 +361,112 @@ const SEGS={
  comm:{n:"Health clubs",grp:"commercial",full:"Commercial, health clubs",icon:"building",u:.15,c:.5,p:6,g:[1,1,2,3,3,2,3]},
  light:{n:"Hospitality and other verticals",grp:"commercial",full:"Commercial, hospitality and other verticals",icon:"hotel",u:.05,c:.1,p:3,g:[1,1,1,2,2,1,2]}
 };
+const xx=(v,keep)=>keep?v:String(v).replace(/[\d.,]*\d/,"XX");
+/* Wellness product line: station overrides. All simulated except the collection listing. */
+const W={
+ buy:{cpub:1,count:"3 massage chair models listed",
+  k:[["3","Massage chair models in the Wellness collection","pub"],["0%","Chair buyers who visit a showroom first","sim"],["0%","Product page to cart","sim"]],
+  f:[["web","Johnson Fitness Australia","The Wellness collection lists three Synca massage chairs.","well"],["int","Web analytics","Most massage chair shoppers view the product page several times before buying."],["int","Chat transcripts","Shoppers ask whether the chair will fit through a standard doorway."],["int","Point of sale","Showroom staff log lost sales where no demo chair was available."]],
+  ins:"A massage chair is a considered purchase, and shoppers want to try it or see it demonstrated before buying."},
+ deliver:{count:"0% of chair deliveries rebooked",
+  f:[["int","Order management","Massage chair deliveries are rebooked when a two-person crew is not available."],["web","Carrier tracking","Bulky-item consignments show the longest gaps between scans."],["int","Contact centre","Customers call to ask whether delivery includes carrying the chair inside and assembling it."]],
+  ins:"Bulky deliveries need a crew and a booked slot, and customers are not told what is included."},
+ use:{count:"0 first-use calls this week",
+  f:[["int","Contact centre","Setup calls ask how to start the first program and adjust the chair to body height."],["web","Help-centre search","Searches for massage chair setup return no article."],["int","Product registrations","Few chair buyers register their product after delivery."]],
+  ins:"New owners need help with first use, and there is no self-help for it."},
+ fault:{count:"0 chair tickets silent 5+ days",
+  f:[["int","Helpdesk","Massage chair tickets wait longer for a first reply than fitness tickets."],["int","Call recordings","Customers struggle to describe which part of the chair has stopped working."],["int","Field service","Few technicians are trained on massage chairs, so visits are booked further out."]],
+  ins:"Faults are hard to describe by phone, and few technicians can diagnose a chair."},
+ parts:{count:"0 chair cases waiting on parts",
+  f:[["int","Parts inventory","Massage chair parts are ordered from the supplier case by case, with no stock held locally."],["web","Supplier and freight ETAs","Supplier lead times for chair parts are not visible to the service desk."],["int","Helpdesk","Customers waiting on chair parts contact the desk repeatedly for updates."]],
+  ins:"Chair parts come from the supplier case by case, so waits are long and the ETA is unknown."},
+ warranty:{count:"0 open chair escalations",
+  f:[["int","Warranty claims","Chair claims take longer to decide because the supplier is consulted on each one."],["int","Escalation log","Customers escalate when a high-value chair is out of use for weeks."],["int","Purchase and service history","Upholstery wear is the most common reason a chair claim is declined."]],
+  ins:"Each claim waits on the supplier, and a high-value chair out of use escalates quickly."},
+ renew:{count:"0 chair owners near warranty end",
+  f:[["int","Installed base and purchase history","Chair owners approaching the end of warranty receive no contact."],["int","Service history","Fitness customers are not offered wellness products, and chair owners are not offered fitness equipment."],["dev","Usage telemetry","No usage data is collected from massage chairs."]],
+  ins:"Wellness and fitness customers are not cross-sold to each other."}
+};
+const cur=s=>line==="well"?{...s,...W[s.id]}:s;
+const MON=["Jun","Jul","Aug","Sep","Oct","Nov"];
+/* Metrics: all simulated except where pub is set. v = six monthly values, good = direction that is an improvement, st = linked stations, d = drivers */
+const M=[
+ {id:"csat",n:"Customer satisfaction (CSAT)",u:"%",good:"up",v:[68,66,65,63,61,62],st:["fault","parts","warranty"],d:[["Service CSAT","54%"],["Delivery CSAT","71%"],["Purchase CSAT","88%"]]},
+ {id:"rating",n:"Public review rating",u:"/ 5",good:"up",v:[1.7,1.6,1.6,1.5,1.4,1.4],pub:"Current value is the public ProductReview rating. The history is simulated.",st:["buy","renew"],d:[["Reviews answered within 7 days","12%"],["Negative share of new reviews","89%"],["New reviews this month","9"]]},
+ {id:"frt",n:"First response time",u:"days",good:"down",v:[2.1,2.4,2.8,3.0,3.3,3.4],st:["fault"],d:[["Tickets silent for 5+ days","118"],["Open cases with no owner","27%"],["Repeat calls mentioning no callback","31%"]]},
+ {id:"ttc",n:"Time to close a ticket",u:"days",good:"down",v:[19,21,24,26,29,31],st:["fault","parts","warranty"],d:[["Cases waiting on parts","37 days"],["Cases waiting on a warranty decision","16 days"],["Cases needing no parts","6 days"]]},
+ {id:"ftf",n:"First time right",u:"%",good:"up",v:[57,55,53,51,49,48],st:["fault","parts"],d:[["Visits ending as part required","44%"],["Second visits booked before part confirmed","29"],["Wrong part shipped","7%"]]},
+ {id:"pw",n:"Cases waiting on parts",u:"",good:"down",v:[268,301,334,371,398,412],st:["parts"],d:[["Median wait","37 days"],["Waiting customers given an ETA","18%"],["Update-chasing contacts this week","203"]]},
+ {id:"otd",n:"Delivered on promised date",u:"%",good:"up",v:[88,87,86,85,86,86],st:["deliver"],d:[["Orders past their promised date","14%"],["Average slip","4.2 days"],["Delivery-date contacts this week","310"]]},
+ {id:"cpc",n:"Touchpoints per case",u:"",good:"down",v:[2.9,3.1,3.4,3.6,3.9,4.1],st:["fault","parts","use"],d:[["Chasing an update","46%"],["New fault report","35%"],["Setup and how-to","19%"]]},
+ {id:"wdt",n:"Warranty decision time",u:"days",good:"down",v:[11,12,13,14,15,16],st:["warranty"],d:[["Claims declined as wear and tear","22%"],["Open escalations","37"],["Goodwill paid after first contact","41 days"]]},
+ {id:"xsell",n:"Cross-sell and upsell rate",u:"%",good:"up",v:[5,5,4,4,4,4],st:["renew","warranty"],d:[["Warranty-expiry reminders sent","0%"],["Service contacts where an offer is made","0%"],["Extended warranty attach rate","0%"]]},
+ {id:"rpr",n:"Repeat purchase rate",u:"%",good:"up",v:[11,11,10,10,9,9],st:["renew","use"],d:[["Service-plan attach rate","6%"],["Owners past 5 years with no contact","2,140"],["App paired in the first week","41%"]]}
+];
+const mdelta=m=>{const d=Math.round((m.v[5]-m.v[3])*10)/10, a=Math.abs(d), un=m.u==="%"?(a===1?" pt":" pts"):m.u==="/ 5"?"":m.u?" "+m.u:"";
+  return d===0?["n","No change vs 2 months ago"]:[((d>0)===(m.good==="up"))?"g":"b",(d>0?"Up":"Down")+" vs 2 months ago"];};
+const mval=m=>`${m.pub?m.v[5]:"XX"}<small> ${m.u}</small>`;
+function linePath(v,w,h,pad){const lo=Math.min(...v),hi=Math.max(...v),r=(hi-lo)||1;
+  const pts=v.map((x,i)=>[pad+i*(w-2*pad)/(v.length-1),h-pad-(x-lo)/r*(h-2*pad)]);
+  return {pts,d:pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ")};}
+function drawMetrics(){
+  $("mgrid").innerHTML=M.map(m=>{const [c,txt]=mdelta(m), L=linePath(m.v,200,36,5), e=L.pts[5], col=c==="g"?"var(--ok)":c==="b"?"var(--s3)":"var(--muted)";
+    return `<button type="button" class="mcard" id="m-${m.id}" data-m="${m.id}"><span class="nm">${m.n}</span><span class="mval">${mval(m)}</span><span class="delta ${c}">${txt}</span>
+     <svg class="spark" viewBox="0 0 200 36" preserveAspectRatio="none" aria-hidden="true"><path d="${L.d}" fill="none" stroke="${col}" stroke-width="2" vector-effect="non-scaling-stroke"/><circle cx="${e[0]}" cy="${e[1]}" r="3" fill="${col}"/></svg>
+     <span class="mini">${m.st.map(id=>{const s=ST.find(x=>x.id===id);return `<span style="background:var(--${s.ph})" title="${s.n}">${ic(s.id)}</span>`;}).join("")}</span></button>`;}).join("");
+}
+function drawMetricModal(){
+  const D=$("mmodal"); if(msel==null){D.hidden=true;return;}
+  const m=M.find(x=>x.id===msel), [c,txt]=mdelta(m), W=520,H=190, L=linePath(m.v,W,H,34), col=c==="g"?"var(--ok)":c==="b"?"var(--s3)":"var(--muted)";
+  const lab=(i,dy)=>`<text x="${L.pts[i][0]}" y="${L.pts[i][1]+dy}" text-anchor="middle" style="fill:var(--ink);font-weight:600">${m.v[i].toLocaleString()}</text>`;
+  D.hidden=false;
+  D.innerHTML=`<div class="modal" role="dialog" aria-modal="true" aria-label="${m.n}"><div class="dhead"><div><h2>${m.n}</h2><small>All segments · last six months</small></div><button type="button" class="x" id="mclose" aria-label="Close">${ic("close")}</button></div>
+  <div class="dbody two">
+   <div class="col">
+    <div class="sec"><span class="mval">${mval(m)}</span><span class="delta ${c}">${txt}</span>
+     <span class="row">${m.pub?`<span class="tag pub">Public</span>`:""}<span class="tag sim">Simulated ${m.pub?"history":"trend"}</span></span>${m.pub?`<span class="small">${m.pub}</span>`:""}</div>
+    <svg class="trend" viewBox="0 0 ${W} ${H}" role="img" aria-label="${m.n}, monthly, June to November">
+     <line x1="34" y1="${H-22}" x2="${W-34}" y2="${H-22}" stroke="var(--line)"/>
+     <line x1="${L.pts[3][0]}" y1="16" x2="${L.pts[3][0]}" y2="${H-22}" stroke="var(--line)" stroke-dasharray="3 4"/>
+     <text x="${L.pts[3][0]}" y="12" text-anchor="middle">2 months ago</text>
+     <path d="${L.d}" fill="none" stroke="${col}" stroke-width="2.5"/>
+     ${L.pts.map((p,i)=>`<circle cx="${p[0]}" cy="${p[1]}" r="${i===5?5:3.5}" fill="${col}" stroke="var(--surface)" stroke-width="1.5"/>`).join("")}
+     ${m.pub?lab(5,-12):""}
+     ${MON.map((x,i)=>`<text x="${L.pts[i][0]}" y="${H-6}" text-anchor="middle">${x}</text>`).join("")}
+    </svg>
+    <div class="sec"><h3>What is driving it</h3><div class="drv">${m.d.map(x=>`<div><span>${x[0]}</span><b>${xx(x[1])}</b></div>`).join("")}</div></div>
+   </div>
+   <div class="col">
+    <div class="sec"><h3>Where it shows up in the journey</h3><span class="small">Open a station to see its signals and approve actions.</span>
+     <div class="lnk">${m.st.map(id=>{const s=ST.find(x=>x.id===id);return `<button type="button" id="ml-${id}" data-st="${id}"><span class="disc" style="background:var(--${s.ph})">${ic(s.id)}</span><span><b>${s.n}</b><small>${esc(s.ins)}</small></span></button>`;}).join("")}</div></div>
+    <div class="sec"><h3>Recommended actions that move this metric</h3>
+     <div class="drv">${m.st.flatMap(id=>{const s=ST.find(x=>x.id===id);return ["o","c"].map(k=>`<div><span>${esc(s.a[lead(s,k)][0])}<br><span class="small">${s.n}</span></span>${catPill(k)}</div>`);}).join("")}</div></div>
+   </div>
+   <p class="fn">Prototype only</p>
+  </div></div>`;
+}
 const ASM=[["units","Machines sold per month",2500],["cases","Service cases per month",1500],["price","Average machine price, A$",2400],["repair","Average paid repair value, A$",380],["visit","Cost of a technician visit, A$",220],["contact","Cost of a handled contact, A$",9]];
 const A={}; ASM.forEach(a=>A[a[0]]=a[2]);
-let seg="home", sel=null, view={}, approved={}, recf="all", timer=null;
+let curView="journey", line="fit", msel=null, seg="home", sel=null, view={}, approved={}, recf="all", timer=null;
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
-const money=n=>n>=1e6?"A$"+(n/1e6).toFixed(1)+"m":n>=1000?"A$"+Math.round(n/1000)+"k":"A$"+Math.round(n);
+const money=n=>"A$XXk";
 
 function est(id){
   const S=SEGS[seg], u=A.units*S.u, c=A.cases*S.c, P=A.price*S.p, R=A.repair, V=A.visit, C=A.contact;
   const E={
-   buy:[u*.04*P,u*.5*C,"4% of monthly sales lost at the review check, at average machine price","Half an extra pre-sale contact per machine sold"],
-   deliver:[u*.02*P,u*.6*C+u*.015*150,"2% of orders cancelled after a missed date","0.6 delivery contacts per order, plus redelivery on 1.5% of orders"],
-   use:[u*.03*300,u*.8*C,"3% of new owners who would have bought a plan or accessories worth A$300","0.8 setup contacts per machine sold"],
-   fault:[c*.10*R,c*.35*V+c*2*C,"10% of cases where a paid repair is abandoned","A repeat visit on 35% of cases, plus two extra contacts per case"],
-   parts:[c*.15*R+c*.01*P,c*.20*V+c*.03*P*.6+c*.10*60,"15% of paid repairs lost or deferred, plus one lost sale per 100 cases","A second visit on 20% of cases, a replacement unit on 3%, expedited freight on 10%"],
-   warranty:[c*.03*P,c*.08*250,"Refunds and returns on 3% of cases","Late goodwill of A$250 on 8% of cases"],
-   renew:[u*.05*P,u*.05*120,"Repeat purchases lost, equal to 5% of monthly sales","A$120 acquisition cost to replace each lost repeat buyer"]
+   buy:[u*.04*P,u*.5*C,"Sales lost when shoppers check reviews before buying","Extra pre-sale contacts about service reputation"],
+   deliver:[u*.02*P,u*.6*C+u*.015*150,"Orders cancelled after a missed delivery date","Delivery-date contacts and redeliveries"],
+   use:[u*.03*300,u*.8*C,"Service plans and accessories not sold to new owners","Setup contacts that self-service could resolve"],
+   fault:[c*.10*R,c*.35*V+c*2*C,"Paid repairs abandoned when no one responds","Repeat technician visits and repeat contacts"],
+   parts:[c*.15*R+c*.01*P,c*.20*V+c*.03*P*.6+c*.10*60,"Paid repairs lost or deferred, and sales lost to long-wait reviews","Second visits, replacement units and expedited freight"],
+   warranty:[c*.03*P,c*.08*250,"Refunds and returns that reverse the sale","Goodwill paid late, after escalation"],
+   renew:[u*.05*P,u*.05*120,"Repeat and upgrade purchases lost","Cost of replacing customers who would have returned"]
   }[id];
   return {rev:E[0],cost:E[1],rn:E[2],cn:E[3]};
 }
 const effect=(s,i)=>{const e=est(s.id),a=s.a[i];return e.rev*a[3]+e.cost*a[4];};
-const CAT={buy:"ooco",deliver:"occo",use:"occo",fault:"cooo",parts:"oooc",warranty:"coco",renew:"coco"};
+const CAT={buy:"ooco",deliver:"occo",use:"occo",fault:"ccooo",parts:"oooc",warranty:"coco",renew:"cooco"};
 const CN={o:"Operational",c:"Capability build"}, CD={o:"Can run now with current teams and tools.",c:"Needs new technology, data or process. Delivered over months."};
 const cat=(s,i)=>CAT[s.id][i];
 const first=(s,c)=>CAT[s.id].indexOf(c);
@@ -352,22 +482,24 @@ function face(v){
 function drawBoard(){
   const S=SEGS[seg], es=ST.map(s=>est(s.id)), mx=Math.max(...es.map(e=>Math.max(e.rev,e.cost)));
   let h=`<div class="lab">Phases</div>`+PH.map((p,i)=>`<div class="phase ${i===0?"first":""}" style="grid-column:span ${p[1]};background:var(--${p[2]})">${p[0]}</div>`).join("");
-  h+=`<div class="lab">Stations</div>`+ST.map((s,i)=>`<div class="cell"><button type="button" class="station" id="st-${s.id}" data-i="${i}" aria-pressed="${sel===i}"><span class="disc" style="background:var(--${s.ph})">${ic(s.id)}<i style="background:var(--s${S.g[i]})"></i></span><b>${s.n}</b><small>${esc(s.count)}</small></button></div>`).join("");
+  h+=`<div class="lab">Stations</div>`+ST.map((s,i)=>`<div class="cell"><button type="button" class="station" id="st-${s.id}" data-i="${i}" aria-pressed="${sel===i}"><span class="disc" style="background:var(--${s.ph})">${ic(s.id)}<i style="background:var(--s${S.g[i]})"></i></span><b>${s.n}</b><small>${esc(xx(cur(s).count,cur(s).cpub))}</small></button></div>`).join("");
   h+=`<div class="lab">Touchpoints</div>`+ST.map(s=>`<div class="cell"><div class="chips">${s.tp.map(t=>`<span class="tp">${t}</span>`).join("")}</div></div>`).join("");
   h+=`<div class="lab">Data feeding in</div>`+ST.map(s=>`<div class="cell"><div class="chips">${s.src.map(x=>`<span class="feedchip ${x[0]}">${ic(x[0])}${x[1]}</span>`).join("")}</div></div>`).join("");
   const ys=S.g.map(v=>[0,22,52,82][v]);
   let d=""; ys.forEach((y,i)=>{const x=(i+.5)/7*700; d+=i?` C${x-50} ${ys[i-1]} ${x-50} ${y} ${x} ${y}`:`M${x} ${y}`;});
   h+=`<div class="lab">Experience</div><div class="exp"><svg class="curve" viewBox="0 0 700 104" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="52" x2="700" y2="52" stroke="var(--line)" stroke-width="1" stroke-dasharray="3 5" vector-effect="non-scaling-stroke"/><path d="${d}" fill="none" stroke="var(--muted)" stroke-width="2.500" vector-effect="non-scaling-stroke"/></svg>${ys.map((y,i)=>`<span class="face" style="left:${(i+.5)/7*100}%;top:${y/104*100}%">${face(S.g[i])}</span>`).join("")}</div>`;
-  h+=`<div class="lab">Leakage per month</div>`+es.map(e=>`<div class="cell"><div class="leak"><div><span class="b"><i style="width:${e.rev/mx*100}%;background:var(--rev)"></i></span>${money(e.rev)}</div><div><span class="b"><i style="width:${e.cost/mx*100}%;background:var(--cost)"></i></span>${money(e.cost)}</div></div></div>`).join("");
-  h+=`<div class="lab">Action</div>`+ST.map(s=>`<div class="cell"><div class="act ${s.a.some((_,i)=>isAp(s,i))?"ok":""}">${s.a.some((_,i)=>isAp(s,i))?s.a.filter((_,i)=>isAp(s,i)).length+" approved":[...CAT[s.id]].filter(c=>c==="o").length+" operational, "+[...CAT[s.id]].filter(c=>c==="c").length+" capability"}</div></div>`).join("");
+  h+=`<div class="lab">Est. leakage / month</div>`+es.map(e=>`<div class="cell"><div class="leak"><div><span><i class="dot" style="background:var(--rev)"></i>Revenue at risk</span><b>${money(e.rev)}</b></div><div><span><i class="dot" style="background:var(--cost)"></i>Cost leakage</span><b>${money(e.cost)}</b></div></div></div>`).join("");
+  h+=`<div class="lab">Actions</div>`+ST.map((s,i)=>{const n=s.a.filter((_,k)=>isAp(s,k)).length, o=[...CAT[s.id]].filter(c=>c==="o").length;return `<div class="cell"><button type="button" class="act ${n?"ok":""}" id="act-${s.id}" data-a="${i}">${n?n+" approved":o+" operational, "+(s.a.length-o)+" capability"}</button></div>`;}).join("");
   $("board").innerHTML=h;
   const tr=es.reduce((a,e)=>a+e.rev,0), tc=es.reduce((a,e)=>a+e.cost,0);
-  $("totals").innerHTML=`<span><i class="dot" style="background:var(--rev)"></i>Revenue at risk <b>${money(tr)}</b> / month</span><span><i class="dot" style="background:var(--cost)"></i>Cost leakage <b>${money(tc)}</b> / month</span><span class="tag sim">Simulated</span>`;
+  $("totals").innerHTML=`<span><i class="dot" style="background:var(--rev)"></i>Est. revenue at risk <b>${money(tr)}</b> / month</span><span><i class="dot" style="background:var(--cost)"></i>Est. cost leakage <b>${money(tc)}</b> / month</span>`;
 }
 function drawSegs(){
   const g=SEGS[seg].grp;
   $("segs").innerHTML=[["consumer","Consumer","home"],["commercial","Commercial","building"]].map(x=>`<button type="button" id="grp-${x[0]}" data-g="${x[0]}" aria-pressed="${x[0]===g}">${ic(x[2])}${x[1]}</button>`).join("");
   $("subs").innerHTML=Object.entries(SEGS).filter(([k,s])=>s.grp===g).map(([k,s])=>`<button type="button" id="seg-${k}" data-k="${k}" aria-pressed="${k===seg}">${s.n}</button>`).join("");
+  $("subs").hidden=Object.values(SEGS).filter(s=>s.grp===g).length<2;
+  $("lines").innerHTML=[["fit","Fitness","use"],["well","Wellness","chair"]].map(x=>`<button type="button" id="line-${x[0]}" data-l="${x[0]}" aria-pressed="${x[0]===line}">${ic(x[2])}${x[1]}</button>`).join("");
 }
 function feedItem(f,isNew){
   return `<div class="fi ${isNew?"new":""}"><span class="s ${f[0]}">${ic(f[0])}</span><div><div class="m"><b>${esc(f[1])}</b><span>${KIND[f[0]]}</span><span class="tag ${f[3]?"pub":"sim"}">${f[3]?"Public":"Simulated"}</span>${f[3]?`<a href="${L[f[3]]}" target="_blank" rel="noopener">source</a>`:""}</div>${esc(f[2])}</div></div>`;
@@ -381,57 +513,69 @@ function startFeed(s){
   timer=setInterval(()=>{ if(n>=order.length){clearInterval(timer);return;} box.insertAdjacentHTML("afterbegin",feedItem(order[n++],true)); },1300);
 }
 function drawDrawer(keepFeed){
-  const D=$("drawer"); document.body.classList.toggle("dopen",sel!=null); if(sel==null){D.hidden=true;clearInterval(timer);return;}
-  const s=ST[sel], e=est(s.id), ci=chosen(s), a=s.a[ci], ap=isAp(s,ci);
+  const D=$("drawer"); if(sel==null){D.hidden=true;clearInterval(timer);return;}
+  const s=cur(ST[sel]), e=est(s.id), ci=chosen(s), a=s.a[ci], ap=isAp(s,ci);
   const old=keepFeed&&$("feed")?$("feed").innerHTML:null;
   D.hidden=false;
-  D.innerHTML=`<div class="dhead"><span class="disc" style="background:var(--${s.ph})">${ic(s.id)}</span><div><h2>${s.n}</h2><small>${SEGS[seg].full}</small></div><button type="button" class="x" id="close" aria-label="Close">${ic("close")}</button></div>
-  <div class="dbody">
-   <div class="kpis">${s.k.map(k=>`<div class="kpi"><b>${k[0]}</b><span>${esc(k[1])}</span><span class="tag ${k[2]}" style="align-self:flex-start">${k[2]==="pub"?"Public":"Simulated"}</span></div>`).join("")}</div>
+  D.innerHTML=`<div class="modal" role="dialog" aria-modal="true" aria-label="${s.n}"><div class="dhead"><span class="disc" style="background:var(--${s.ph})">${ic(s.id)}</span><div><h2>${s.n}</h2><small>${SEGS[seg].full} · ${line==="well"?"Wellness":"Fitness"}</small></div><button type="button" class="x" id="close" aria-label="Close">${ic("close")}</button></div>
+  <div class="dbody two">
+   <div class="col">
+   
+   <div class="kpis">${s.k.map(k=>`<div class="kpi"><b>${xx(k[0],k[2]==="pub")}</b><span>${esc(k[1])}</span><span class="tag ${k[2]}" style="align-self:flex-start">${k[2]==="pub"?"Public":"Simulated"}</span></div>`).join("")}</div>
+   <div class="chips left"><span class="small">Linked metrics:</span>${M.filter(m=>m.st.includes(s.id)).map(m=>`<button type="button" class="tp lk" id="lk-${m.id}" data-m="${m.id}">${m.n}</button>`).join("")}</div>
    <div class="sec"><div class="h"><h3><i class="live"></i>Signals coming in</h3><button type="button" class="btn ghost" id="replay" style="padding:4px 10px;font-size:12px">Replay feed</button></div><div class="feed" id="feed"></div></div>
    <div class="sec"><h3>What the data is saying</h3><p class="insight">${esc(s.ins)}</p></div>
    <div class="sec"><h3>Estimated leakage at this station</h3>
-    <div class="money"><div class="r"><span>Revenue at risk / month</span><b>${money(e.rev)}</b><small>${esc(e.rn)}</small></div><div class="c"><span>Cost leakage / month</span><b>${money(e.cost)}</b><small>${esc(e.cn)}</small></div></div>
-    <p class="small">Illustrative, calculated from the values under Data and assumptions.</p></div>
-   <div class="sec"><h3>Recommended actions</h3>
-    ${["o","c"].map(c=>`<div class="grp"><div class="gh">${catPill(c)}<span class="small">${CD[c]}</span></div><div class="opts">${s.a.map((o,i)=>cat(s,i)!==c?"":`<button type="button" class="opt" id="opt-${s.id}-${i}" data-o="${i}" aria-pressed="${i===ci}"><span class="r1"><b>${esc(o[0])}</b><span class="eff">${money(effect(s,i))} / month</span></span><span class="d">${esc(o[1])}</span><span class="row">${i===first(s,c)?`<span class="pill">Recommended</span>`:""}<span class="pill kind">${o[2]}</span>${isAp(s,i)?`<span class="pill ok">Approved</span>`:""}</span></button>`).join("")}</div></div>`).join("")}
-    <div class="prev"><div class="row" style="justify-content:space-between"><b>${a[2]==="Proactive message"||a[2]==="Goodwill"||a[2]==="Reputation"?"Draft message":"What would run"}</b><span class="aud">Audience: ${esc(a[5])}</span></div><pre>${esc(a[6])}</pre>
+    <div class="money"><div class="r"><span>Est. revenue at risk / month</span><b>${money(e.rev)}</b><small>${esc(e.rn)}</small></div><div class="c"><span>Est. cost leakage / month</span><b>${money(e.cost)}</b><small>${esc(e.cn)}</small></div></div>
+    <p class="small">To be sized with data from Johnson. See Data and assumptions.</p></div>
+   </div><div class="col"><div class="sec" id="acts"><h3>Recommended actions</h3><span class="small">Select an action to see its draft, then approve it.</span>
+    ${["o","c"].map(c=>`<div class="grp"><div class="gh">${catPill(c)}<span class="small">${CD[c]}</span></div><div class="opts">${s.a.map((o,i)=>cat(s,i)!==c?"":`<button type="button" class="opt" id="opt-${s.id}-${i}" data-o="${i}" aria-pressed="${i===ci}"><span class="r1"><b>${esc(o[0])}</b></span><span class="d">${esc(o[1])}</span><span class="effs"><span><i class="dot" style="background:var(--rev)"></i>Est. revenue at risk <b>A$XXk</b> / month</span><span><i class="dot" style="background:var(--cost)"></i>Est. cost leakage <b>A$XXk</b> / month</span></span><span class="row">${i===first(s,c)?`<span class="pill">Recommended</span>`:""}<span class="pill kind">${o[2]}</span>${isAp(s,i)?`<span class="pill ok">Approved</span>`:""}</span></button>`).join("")}</div></div>`).join("")}
+    <div class="prev"><div class="row" style="justify-content:space-between"><b>${a[2]==="Proactive message"||a[2]==="Goodwill"||a[2]==="Reputation"?"Draft message":"What would run"}</b><span class="aud">Audience: ${esc(a[5].replace(/^(About )?[\d.,]*\d/,"$1XX"))}</span></div><pre>${esc(a[6])}</pre>
      <div class="row">${ap?`<span class="pill ok">Approved and queued</span><button type="button" class="btn ghost" id="undo">Undo</button>`:`<button type="button" class="btn" id="approve">Approve this action</button>`}<a href="#recommendations" class="small">See all recommendations</a></div>
      </div></div>
+   </div>
    <p class="fn">Prototype only</p>
-  </div>`;
+  </div></div>`;
   if(old!=null) $("feed").innerHTML=old; else startFeed(s);
 }
 function drawRecs(){
-  const rows=ST.flatMap(s=>["o","c"].map(c=>({s,c,i:lead(s,c)}))).map(r=>({...r,e:effect(r.s,r.i)})).sort((a,b)=>b.e-a.e);
+  const rows=ST.flatMap(s=>["o","c"].map(c=>({s,c,i:lead(s,c)}))).map(r=>({...r,e:effect(r.s,r.i)}));
   const shown=rows.filter(r=>recf==="all"||r.c===recf);
   $("recf").innerHTML=[["all","All"],["o",CN.o],["c",CN.c]].map(f=>`<button type="button" id="recf-${f[0]}" data-f="${f[0]}" aria-pressed="${recf===f[0]}">${f[1]}</button>`).join("");
   $("recs").innerHTML=shown.map(r=>{const a=r.s.a[r.i], ap=isAp(r.s,r.i), key=r.s.id+":"+r.i;
-    return `<tr><td><span class="stg"><span class="disc" style="background:var(--${r.s.ph})">${ic(r.s.id)}</span>${r.s.n}</span></td><td><b>${esc(a[0])}</b><br><span class="small">${esc(a[1])}</span></td><td>${catPill(r.c)}</td><td><span class="pill kind">${a[2]}</span></td><td class="n">${money(r.e)}</td><td>${ap?`<span class="pill ok">Approved</span>`:`<span class="pill wait">Proposed</span>`}</td><td><span class="row" style="flex-wrap:nowrap"><button type="button" class="btn ghost" id="rev-${r.s.id}-${r.i}" data-review="${key}">Review</button><button type="button" class="btn ${ap?"ghost":""}" id="apr-${r.s.id}-${r.i}" data-toggle="${key}">${ap?"Undo":"Approve"}</button></span></td></tr>`;}).join("");
+    return `<tr><td><span class="stg"><span class="disc" style="background:var(--${r.s.ph})">${ic(r.s.id)}</span>${r.s.n}</span></td><td><b>${esc(a[0])}</b><br><span class="small">${esc(a[1])}</span></td><td>${catPill(r.c)}</td><td><span class="pill kind">${a[2]}</span></td><td><span class="effs" style="flex-direction:column"><span><i class="dot" style="background:var(--rev)"></i>Est. revenue at risk <b>A$XXk</b> / month</span><span><i class="dot" style="background:var(--cost)"></i>Est. cost leakage <b>A$XXk</b> / month</span></span></td><td>${ap?`<span class="pill ok">Approved</span>`:`<span class="pill wait">Proposed</span>`}</td><td><span class="row" style="flex-wrap:nowrap"><button type="button" class="btn ghost" id="rev-${r.s.id}-${r.i}" data-review="${key}">Review</button><button type="button" class="btn ${ap?"ghost":""}" id="apr-${r.s.id}-${r.i}" data-toggle="${key}">${ap?"Undo":"Approve"}</button></span></td></tr>`;}).join("");
   const es=ST.map(s=>est(s.id)), tot=es.reduce((a,e)=>a+e.rev+e.cost,0);
   const sumc=c=>rows.filter(r=>r.c===c).reduce((a,r)=>a+r.e,0), keys=Object.keys(approved), n=keys.length;
   const done=keys.reduce((a,k)=>{const [id,i]=k.split(":");return a+effect(ST.find(x=>x.id===id),+i);},0);
-  $("sum").innerHTML=`<div><b>${money(tot)}</b><span>Estimated leakage per month, revenue and cost</span></div><div><b>${money(sumc("o"))}</b><span>Effect of the operational actions listed</span></div><div><b>${money(sumc("c"))}</b><span>Effect of the capability builds listed</span></div><div><b>${money(done)}</b><span>Covered by ${n} approved action${n===1?"":"s"}</span></div>`;
-  $("rec-seg").textContent="Segment: "+SEGS[seg].full;
+  $("sum").innerHTML=`<div><b>${rows.filter(r=>r.c==="o").length}</b><span>Operational actions listed</span></div><div><b>${rows.filter(r=>r.c==="c").length}</b><span>Capability builds listed</span></div><div><b>${n}</b><span>Approved</span></div>`;
+  $("rec-seg").textContent="Segment: "+SEGS[seg].full+" · "+(line==="well"?"Wellness":"Fitness");
 }
 function drawAsm(){
-  $("form").innerHTML=ASM.map(a=>`<label for="asm-${a[0]}">${a[1]}<input id="asm-${a[0]}" data-k="${a[0]}" type="number" min="0" value="${A[a[0]]}"></label>`).join("");
+  $("form").innerHTML=ASM.map(a=>`<div class="inp">${a[1].replace(", A$","")}</div>`).join("");
   $("srcs").innerHTML=ST.map(s=>s.src.map((x,i)=>{const pub=(x[1]==="Review sites"||x[1]==="Help-centre search");
     return `<tr>${i===0?`<td rowspan="${s.src.length}"><span class="stg"><span class="disc" style="background:var(--${s.ph})">${ic(s.id)}</span>${s.n}</span></td>`:""}<td>${x[1]}</td><td>${KIND[x[0]]}</td><td>${x[1]==="Review sites"?`<span class="pill ok">Public today</span>`:`<span class="pill wait">Needs Johnson access</span>`}</td></tr>`;}).join("")).join("");
 }
 function redraw(keep){drawSegs();drawBoard();drawDrawer(keep);drawRecs();}
 function route(){
-  const h=location.hash.slice(1), v=["recommendations","assumptions"].includes(h)?h:"journey";
-  ["journey","recommendations","assumptions"].forEach(k=>{$("view-"+k).hidden=k!==v; const tb=$("tab-"+k); if(!tb)return; if(k===v)tb.setAttribute("aria-current","page"); else tb.removeAttribute("aria-current");});
+  const h=location.hash.slice(1), v=["recommendations","metrics","assumptions"].includes(h)?h:"journey";
+  ["journey","recommendations","metrics","assumptions"].forEach(k=>{$("view-"+k).hidden=k!==v; const tb=$("tab-"+k); if(!tb)return; if(k===v)tb.setAttribute("aria-current","page"); else tb.removeAttribute("aria-current");});
   if(v==="assumptions") scrollTo(0,0);
-  if(v!=="journey"){sel=null;drawDrawer();drawBoard();}
+  curView=v; document.body.classList.toggle("jview",v==="journey");
+  if(v!=="journey")sel=null; if(v!=="metrics")msel=null; drawBoard(); drawDrawer(true); drawMetricModal();
 }
 $("segs").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const g=b.dataset.g;if(SEGS[seg].grp!==g)seg=Object.keys(SEGS).find(k=>SEGS[k].grp===g);redraw(true);$("grp-"+g).focus({preventScroll:true});});
+$("lines").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;line=b.dataset.l;redraw();$("line-"+line).focus({preventScroll:true});});
 $("subs").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;seg=b.dataset.k;redraw(true);$("seg-"+seg).focus({preventScroll:true});});
-$("board").addEventListener("click",e=>{const b=e.target.closest(".station");if(!b)return;sel=+b.dataset.i;drawBoard();drawDrawer();});
+$("board").addEventListener("click",e=>{
+  const a=e.target.closest(".act"), b=e.target.closest(".station"); if(!a&&!b)return;
+  sel=a?+a.dataset.a:+b.dataset.i; drawBoard(); drawDrawer();
+  if(a){const x=$("acts"), bd=document.querySelector("#drawer .dbody"); if(x&&bd)bd.scrollTop=x.offsetTop-bd.offsetTop;}
+});
+addEventListener("resize",()=>drawDrawer(true));
 $("drawer").addEventListener("click",e=>{
   const s=ST[sel]; if(!s) return;
-  if(e.target.closest("#close")){const id=s.id;sel=null;drawBoard();drawDrawer();const b=$("st-"+id);if(b)b.focus();return;}
+  const lk=e.target.closest("[data-m]"); if(lk){msel=lk.dataset.m; sel=null; if(location.hash!=="#metrics")location.hash="metrics"; route(); return;}
+  if(e.target.closest("#close")||e.target.id==="drawer"){const id=s.id;sel=null;drawBoard();drawDrawer();const b=$("st-"+id);if(b)b.focus();return;}
   if(e.target.closest("#replay")){startFeed(s);return;}
   const o=e.target.closest(".opt"); if(o){view[s.id]=+o.dataset.o;redraw(true);const f=$(`opt-${s.id}-${view[s.id]}`);if(f)f.focus({preventScroll:true});return;}
   if(e.target.closest("#approve")){approved[s.id+":"+chosen(s)]=true;redraw(true);return;}
@@ -446,8 +590,14 @@ $("recs").addEventListener("click",e=>{
 $("recf").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;recf=b.dataset.f;drawRecs();$("recf-"+recf).focus({preventScroll:true});});
 $("form").addEventListener("input",e=>{const k=e.target.dataset.k;if(!k)return;A[k]=Math.max(0,+e.target.value||0);drawBoard();drawRecs();});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&sel!=null){const id=ST[sel].id;sel=null;drawBoard();drawDrawer();const b=$("st-"+id);if(b)b.focus();}});
+$("mgrid").addEventListener("click",e=>{const b=e.target.closest(".mcard");if(!b)return;msel=b.dataset.m;drawMetricModal();const c=$("mclose");if(c)c.focus({preventScroll:true});});
+$("mmodal").addEventListener("click",e=>{
+  if(e.target.closest("#mclose")||e.target.id==="mmodal"){const id=msel;msel=null;drawMetricModal();const b=$("m-"+id);if(b)b.focus({preventScroll:true});return;}
+  const st=e.target.closest("[data-st]"); if(st){msel=null;sel=ST.findIndex(x=>x.id===st.dataset.st);location.hash="journey";route();drawBoard();drawDrawer();}
+});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&msel!=null){const id=msel;msel=null;drawMetricModal();const b=$("m-"+id);if(b)b.focus({preventScroll:true});}});
 addEventListener("hashchange",route);
-drawAsm();redraw();route();
+drawAsm();drawMetrics();redraw();route();
 </script>
 
 </body></html>
